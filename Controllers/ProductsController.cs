@@ -32,6 +32,12 @@ namespace WebApiCRUD.Controllers
             _context.SaveChanges();
         }
 
+        [HttpPut]
+        public void UpdateProduct([FromBody] Product product)
+        {
+            _context.Products.Update(product);
+            _context.SaveChanges();
+        }
 
 
     }
