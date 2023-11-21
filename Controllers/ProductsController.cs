@@ -39,6 +39,11 @@ namespace WebApiCRUD.Controllers
             _context.SaveChanges();
         }
 
-
+        [HttpDelete("{id}")]
+        public void DeleteProduct(long id)
+        {
+            _context.Products.Remove(new Product() {Id = id});
+            _context.SaveChanges();
+        }
     }
 }
