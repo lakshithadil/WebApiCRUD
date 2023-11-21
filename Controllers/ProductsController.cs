@@ -25,5 +25,14 @@ namespace WebApiCRUD.Controllers
             return _context.Products.Find(id);
         }
 
+        [HttpPost]
+        public void SaveProduct([FromBody] Product product)
+        {
+            _context.Products.Add(product);
+            _context.SaveChanges();
+        }
+
+
+
     }
 }
