@@ -1,49 +1,56 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WebApiCRUD.Models;
+using WebApiCRUD.Service;
 
 namespace WebApiCRUD.Controllers
 {
     [Route("api/[controller]")]
     public class ProductsController : ControllerBase
+    { 
+    private readonly IProductsService _productsService;
+
+    public ProductsController(IProductsService productsService)
     {
-        private readonly DataContext _context;
+        this._productsService = productsService;
+    }
 
-        public ProductsController(DataContext ctx)
-        {
-            _context = ctx;
-        }
-        [HttpGet]
-        public IEnumerable<Product> GetProducts()
-        {
-            return _context.Products;
-        }
+    [HttpGet]
+    public IActionResult GetProducts()
+    {
+        var products = _productsService.GetAll();
+        return Ok(products);
+    }
 
-        [HttpGet("{id}")]
-        public Product? GetProduct(long id, [FromServices] ILogger<ProductsController> logger)
+    [HttpGet("{id}")]
+    public IActionResult GetProduct(long id, [FromServices] ILogger<ProductsController> logger)
+    {
+        logger.LogDebug("GetProduct Action Invoked");
+        var productToReturn = _productsService.Get(id);
+        if (productToReturn == null)
         {
-            logger.LogDebug("GetProduct Action Invoked");
-            return _context.Products.Find(id);
+            return NotFound();
         }
-
-        [HttpPost]
-        public void SaveProduct([FromBody] Product product)
-        {
-            _context.Products.Add(product);
-            _context.SaveChanges();
+        return Ok(productToReturn);
         }
 
-        [HttpPut]
-        public void UpdateProduct([FromBody] Product product)
-        {
-            _context.Products.Update(product);
-            _context.SaveChanges();
-        }
+    /*[HttpPost]
+    public void SaveProduct([FromBody] Product product)
+    {
+        _context.Products.Add(product);
+        _context.SaveChanges();
+    }
 
-        [HttpDelete("{id}")]
-        public void DeleteProduct(long id)
-        {
-            _context.Products.Remove(new Product() {Id = id});
-            _context.SaveChanges();
-        }
+    [HttpPut]
+    public void UpdateProduct([FromBody] Product product)
+    {
+        _context.Products.Update(product);
+        _context.SaveChanges();
+    }
+
+    [HttpDelete("{id}")]
+    public void DeleteProduct(long id)
+    {
+        _context.Products.Remove(new Product() { Id = id });
+        _context.SaveChanges();
+    }*/
     }
 }
