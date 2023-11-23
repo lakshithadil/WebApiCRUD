@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using WebApiCRUD.Models;
+using WebApiCRUD.Domain;
 
 namespace WebApiCRUD.Data
 {
@@ -9,5 +9,12 @@ namespace WebApiCRUD.Data
         : base(opts) { }
 
         public DbSet<Product> Products => Set<Product>();
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(DataContext).Assembly, t => t.Namespace == "WebApiCRUD.Domain");
+        }
     }
 }

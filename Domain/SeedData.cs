@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WebApiCRUD.Data;
 
-namespace WebApiCRUD.Models
+namespace WebApiCRUD.Domain
 {
     public static class SeedData
     {
@@ -11,10 +11,13 @@ namespace WebApiCRUD.Models
             if (!context.Products.Any())
             {
                 context.Products.AddRange(
-                    new Product {
-                    Name = "Kayak", Description = "A boat for one person",
-                    Category = "Watersports", Price = 275
-                },
+                    new Product
+                    {
+                        Name = "Kayak",
+                        Description = "A boat for one person",
+                        Category = "Watersports",
+                        Price = 275
+                    },
                 new Product
                 {
                     Name = "Lifejacket",

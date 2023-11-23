@@ -1,56 +1,82 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using WebApiCRUD.Domain;
+using WebApiCRUD.Models;
 using WebApiCRUD.Service;
 
 namespace WebApiCRUD.Controllers
 {
     [Route("api/[controller]")]
+    [ApiController]
     public class ProductsController : ControllerBase
-    { 
-    private readonly IProductsService _productsService;
-
-    public ProductsController(IProductsService productsService)
     {
-        this._productsService = productsService;
-    }
 
-    [HttpGet]
-    public IActionResult GetProducts()
-    {
-        var products = _productsService.GetAll();
-        return Ok(products);
-    }
+        private readonly IProductsService _productsService;
+        private readonly IMapper _mapper;
 
-    [HttpGet("{id}")]
-    public IActionResult GetProduct(long id, [FromServices] ILogger<ProductsController> logger)
-    {
-        logger.LogDebug("GetProduct Action Invoked");
-        var productToReturn = _productsService.Get(id);
-        if (productToReturn == null)
+        public ProductsController(IProductsService productsService, IMapper mapper)
         {
-            return NotFound();
+            _productsService = productsService;
+            _mapper = mapper;
         }
-        return Ok(productToReturn);
+
+        [HttpGet]
+        public IActionResult GetProducts()
+        {
+            var products = _productsService.GetAll();
+            var productModels = _mapper.Map<IEnumerable<ProductModel>>(products);
+            return Ok(productModels);
+
         }
 
-    /*[HttpPost]
-    public void SaveProduct([FromBody] Product product)
-    {
-        _context.Products.Add(product);
-        _context.SaveChanges();
-    }
+        [HttpGet("{id}")]
+        public IActionResult GetProduct(long id, [FromServices] ILogger<ProductsController> logger)
+        {
+            logger.LogDebug("GetProduct Action Invoked");
+            var productToReturn = _productsService.Get(id);
+            var productModel = _mapper.Map<ProductModel>(productToReturn);
+            if (productModel == null)
+            {
+                return NotFound();
+            }
 
-    [HttpPut]
-    public void UpdateProduct([FromBody] Product product)
-    {
-        _context.Products.Update(product);
-        _context.SaveChanges();
-    }
+            return Ok(productModel);
+        }
 
-    [HttpDelete("{id}")]
-    public void DeleteProduct(long id)
-    {
-        _context.Products.Remove(new Product() { Id = id });
-        _context.SaveChanges();
-    }*/
+        [HttpPost]
+        public IActionResult SaveProduct(ProductModel model)
+        {
+            var productToAdd = _mapper.Map<Product>(model);
+            _productsService.Add(productToAdd);
+
+            return CreatedAtAction(nameof(GetProduct), new { id = productToAdd.Id }, model);
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult UpdateProduct(long id, ProductModel model)
+        {
+            var productFromDb = _productsService.Get(id);
+            if (productFromDb == null)
+            {
+                return NotFound();
+            }
+
+            TryUpdateModelAsync(productFromDb);
+            _productsService.Update(productFromDb);
+            return Ok(productFromDb);
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteProduct(long id)
+        {
+            var productFromDb = _productsService.Get(id);
+            if (productFromDb == null)
+            {
+                return NotFound();
+            }
+
+            _productsService.Delete(productFromDb);
+            return NoContent();
+        }
     }
 }

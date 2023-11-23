@@ -1,7 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using System.Runtime.ConstrainedExecution;
 using WebApiCRUD.Data;
-using WebApiCRUD.Models;
+using WebApiCRUD.Domain;
+using WebApiCRUD.Mapping;
 using WebApiCRUD.Service;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +18,9 @@ builder.Services.AddDbContext<DataContext>(opts =>
 
 builder.Services.AddScoped<IProductsRepository, ProductsRepository>();
 builder.Services.AddScoped<IProductsService, ProductsService>();
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddAutoMapper(typeof(ProductProfile));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

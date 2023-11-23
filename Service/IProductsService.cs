@@ -1,4 +1,4 @@
-﻿using WebApiCRUD.Models;
+﻿using WebApiCRUD.Domain;
 
 namespace WebApiCRUD.Service
 {

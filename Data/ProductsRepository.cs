@@ -1,4 +1,4 @@
-﻿using WebApiCRUD.Models;
+﻿using WebApiCRUD.Domain;
 
 namespace WebApiCRUD.Data
 {
@@ -8,7 +8,7 @@ namespace WebApiCRUD.Data
 
         public ProductsRepository(DataContext context)
         {
-            this._context = context;
+            _context = context;
         }
 
         public Product Add(Product product)
