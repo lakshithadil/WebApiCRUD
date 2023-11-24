@@ -1,14 +1,17 @@
 ﻿using WebApiCRUD.Domain;
+using WebApiCRUD.Interfaces;
 
 namespace WebApiCRUD.Data
 {
     public class ProductsRepository : IProductsRepository
     {
         private readonly DataContext _context;
+        private readonly IProductFactory _productFactory;
 
-        public ProductsRepository(DataContext context)
+        public ProductsRepository(DataContext context, IProductFactory productFactory)
         {
             _context = context;
+            _productFactory = productFactory;
         }
 
         public Product Add(Product product)

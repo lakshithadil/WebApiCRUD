@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using WebApiCRUD.Data;
+using WebApiCRUD.Domain;
 
-namespace WebApiCRUD.Domain
+namespace WebApiCRUD.Data
 {
     public static class SeedData
     {

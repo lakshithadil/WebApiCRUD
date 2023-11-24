@@ -1,7 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using System.Runtime.ConstrainedExecution;
+using WebApiCRUD.Concrete;
 using WebApiCRUD.Data;
-using WebApiCRUD.Domain;
+using WebApiCRUD.Interfaces;
 using WebApiCRUD.Mapping;
 using WebApiCRUD.Service;
 
@@ -18,6 +19,11 @@ builder.Services.AddDbContext<DataContext>(opts =>
 
 builder.Services.AddScoped<IProductsRepository, ProductsRepository>();
 builder.Services.AddScoped<IProductsService, ProductsService>();
+builder.Services.AddScoped<IProductFactory, ProductFactory>();
+
+builder.Services.AddScoped<IProduct, EconomyProduct>();
+builder.Services.AddScoped<IProduct, StandardProduct>();
+builder.Services.AddScoped<IProduct, LuxuryProduct>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddAutoMapper(typeof(ProductProfile));

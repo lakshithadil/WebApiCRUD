@@ -1,16 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using WebApiCRUD.Interfaces;
 
-namespace WebApiCRUD.Domain
+namespace WebApiCRUD.Concrete
 {
-    public class Product 
+    public class StandardProduct : IProduct
     {
         public long Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-
-        [Column(TypeName = "decimal(8, 2)")]
         public decimal Price { get; set; }
-
-        public string Category { get; set; } = string.Empty;
+        public string Category { get; set; } = "Standard Product";
     }
 }

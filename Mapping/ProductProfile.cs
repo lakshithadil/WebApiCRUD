@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using WebApiCRUD.Concrete;
 using WebApiCRUD.Domain;
+using WebApiCRUD.Interfaces;
 using WebApiCRUD.Models;
 
 namespace WebApiCRUD.Mapping
@@ -9,7 +11,11 @@ namespace WebApiCRUD.Mapping
         public ProductProfile()
         {
             CreateMap<Product, ProductModel>().ReverseMap();
-            
+            CreateMap<IProduct, ProductModel>()
+                .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Category))
+                .ForMember(dest => dest.Name, opt => opt.Ignore()) 
+                .ForMember(dest => dest.Description, opt => opt.Ignore())
+                .ForMember(dest => dest.Price, opt => opt.Ignore());
         }
     }
 }
