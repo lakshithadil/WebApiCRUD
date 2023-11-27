@@ -36,16 +36,16 @@ namespace WebApiCRUD.Data
             return _context.Products.Find(id);
         }
 
-        public bool Delete(Product speaker)
+        public bool Delete(Product product)
         {
-            var deleted = _context.Products.Remove(speaker);
+            var deleted = _context.Products.Remove(product);
             _context.SaveChanges();
             return true;
         }
 
-        public Product Update(Product speaker)
+        public Product Update(Product product)
         {
-            var updatedEntity = _context.Products.Update(speaker).Entity;
+            var updatedEntity = _context.Products.Update(product).Entity;
             _context.SaveChanges();
             return updatedEntity;
         }

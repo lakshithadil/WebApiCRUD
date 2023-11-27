@@ -51,19 +51,21 @@ namespace WebApiCRUD.Controllers
         public IActionResult SaveProduct(ProductModel model)
         {
             var productType = model.Category;
-            var newProduct = _productFactory.CreateProduct(productType);
+            var newIProduct = _productFactory.CreateProduct(productType);
 
-            /*model.Category = newProduct.Category;*/
-            /*var newModel = _mapper.Map<ProductModel>(newProduct);*/
-            var productToAdd = _mapper.Map<Product>(model);
+            /*model.Category = newIProduct.Category;
+            var productToAdd = _mapper.Map<Product>(model);*/
             
+            _mapper.Map(newIProduct, model);
+            var productToAdd = _mapper.Map<Product>(model);
+
             _productsService.Add(productToAdd);
 
-            return CreatedAtAction(nameof(GetProduct), new { id = productToAdd.Id }, model);
+            return CreatedAtAction(nameof(GetProduct), new { id = productToAdd.Id }, productToAdd);
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateProduct(long id)
+        public IActionResult UpdateProduct(long id, ProductModel model)
         {
             var productFromDb = _productsService.Get(id);
             if (productFromDb == null)
@@ -71,7 +73,7 @@ namespace WebApiCRUD.Controllers
                 return NotFound();
             }
 
-            TryUpdateModelAsync(productFromDb);
+            _mapper.Map(model, productFromDb);
             _productsService.Update(productFromDb);
             return Ok(productFromDb);
         }

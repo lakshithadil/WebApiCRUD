@@ -2,7 +2,7 @@
 
 namespace WebApiCRUD.Concrete
 {
-    public class StandardProduct : IProduct
+    public class StandardProduct : IStandardProduct
     {
         public long Id { get; set; }
         public string Name { get; set; } = string.Empty;

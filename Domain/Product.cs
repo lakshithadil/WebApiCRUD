@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using WebApiCRUD.Interfaces;
 
 namespace WebApiCRUD.Domain
 {
-    public class Product 
+    public class Product
     {
         public long Id { get; set; }
         public string Name { get; set; } = string.Empty;
